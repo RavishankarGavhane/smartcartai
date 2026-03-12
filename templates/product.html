@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - SmartCartAI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Copy the header and footer styles from your index.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Amazon Ember', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #e3e6e6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header styles (copy from index.html) */
+        .header {
+            background: linear-gradient(135deg, #131921 0%, #232f3e 100%);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 0.5rem 2rem;
+        }
+
+        .nav-row1 {
+            display: grid;
+            grid-template-columns: auto auto 1fr auto auto;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ff9900;
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            flex: 1;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: none;
+            outline: none;
+        }
+
+        .search-btn {
+            background: #ff9900;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .cart-icon {
+            position: relative;
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ff9900;
+            color: #131921;
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            width: 100%;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            margin-bottom: 2rem;
+            color: #555;
+        }
+
+        .breadcrumb a {
+            color: #007185;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: #ff9900;
+        }
+
+        .breadcrumb span {
+            margin: 0 0.5rem;
+        }
+
+        /* Product Container */
+        .product-container {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .product-image {
+            text-align: center;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+        }
+
+        .product-info h1 {
+            font-size: 1.8rem;
+            color: #232f3e;
+            margin-bottom: 1rem;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stars {
+            color: #ffa41c;
+        }
+
+        .reviews {
+            color: #007185;
+        }
+
+        .product-price {
+            margin-bottom: 1rem;
+        }
+
+        .current-price {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #b12704;
+        }
+
+        .original-price {
+            font-size: 1.2rem;
+            color: #565959;
+            text-decoration: line-through;
+            margin-left: 0.5rem;
+        }
+
+        .discount {
+            color: #cc0c39;
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+
+        .product-delivery {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #28a745;
+            margin-bottom: 1rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .add-to-cart {
+            flex: 1;
+            padding: 1rem;
+            background: #ffd814;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .buy-now {
+            flex: 1;
+            padding: 1rem;
+            background: #ff9900;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+        }
+
+        .product-description {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .product-description h2 {
+            margin-bottom: 1rem;
+            color: #232f3e;
+        }
+
+        .product-description p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Footer styles (copy from index.html) */
+        .footer {
+            background: linear-gradient(135deg, #131921 0%, #232f3e 100%);
+            color: white;
+            margin-top: 3rem;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: #ff9900;
+        }
+
+        .footer-section a {
+            color: #ddd;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #3b4a5c;
+        }
+
+        .india-flag {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #ff9933 33%, #ffffff 33%, #ffffff 66%, #138808 66%);
+            border-radius: 3px;
+            margin-right: 5px;
+        }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff9900;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #232f3e;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1003;
+            border-left: 4px solid #ff9900;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="nav-row1">
+                <a href="/" class="logo">
+                    <i class="fas fa-robot"></i>
+                    SmartCartAI
+                </a>
+                
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search products...">
+                    <button class="search-btn" onclick="searchProducts()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                
+                <div class="nav-right">
+                    <a href="/login" class="nav-item" id="loginNavItem">
+                        <span>Hello, Sign in</span>
+                        <span>Account & Lists</span>
+                    </a>
+                    
+                    <div class="nav-item" style="display: none;" id="userNavItem">
+                        <span>Hello, <span id="userFirstName"></span></span>
+                        <span>Your Account</span>
+                    </div>
+                    
+                    <a href="/orders" class="nav-item">
+                        <span>Returns</span>
+                        <span>& Orders</span>
+                    </a>
+                    
+                    <div class="cart-icon" onclick="window.location.href='/cart'">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="breadcrumb">
+            <a href="/">Home</a>
+            <span>›</span>
+            <a href="#" id="categoryLink"></a>
+            <span>›</span>
+            <span id="productName"></span>
+        </div>
+
+        <div id="productDetails">
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p style="margin-top: 1rem;">Loading product details...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Get to Know Us</h3>
+                <a href="#">About SmartCartAI</a>
+                <a href="#">Careers</a>
+                <a href="#">Press Releases</a>
+            </div>
+            <div class="footer-section">
+                <h3>Connect with Us</h3>
+                <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+                <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>
+                <span class="india-flag"></span>
+                © 2024 SmartCartAI.com. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <div class="notification" id="notification"></div>
+
+    <script>
+        let currentUser = null;
+        const productId = window.location.pathname.split('/').pop();
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            await checkAuthStatus();
+            await loadProductDetails();
+            loadCartCount();
+        });
+
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/auth/me', {
+                    credentials: 'same-origin'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentUser = data.user;
+                    document.getElementById('loginNavItem').style.display = 'none';
+                    document.getElementById('userNavItem').style.display = 'flex';
+                    document.getElementById('userFirstName').textContent = currentUser.firstName;
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+            }
+        }
+
+        async function loadProductDetails() {
+            try {
+                const response = await fetch(`/api/products/${productId}`);
+                
+                if (response.ok) {
+                    const product = await response.json();
+                    displayProduct(product);
+                } else {
+                    showError('Product not found');
+                }
+            } catch (error) {
+                console.error('Error loading product:', error);
+                showError('Failed to load product details');
+            }
+        }
+
+        function displayProduct(product) {
+            const container = document.getElementById('productDetails');
+            document.getElementById('productName').textContent = product.name;
+            document.getElementById('categoryLink').textContent = product.category;
+            document.getElementById('categoryLink').href = `/category/${product.category}`;
+
+            const stars = '★'.repeat(Math.floor(product.rating || 0)) + ((product.rating || 0) % 1 ? '½' : '');
+
+            container.innerHTML = `
+                <div class="product-container">
+                    <div class="product-grid">
+                        <div class="product-image">
+                            <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/400?text=Product'">
+                        </div>
+                        <div class="product-info">
+                            <h1>${product.name}</h1>
+                            
+                            <div class="product-rating">
+                                <div class="stars">${stars}</div>
+                                <span class="reviews">${product.reviews?.toLocaleString() || 0} ratings</span>
+                            </div>
+
+                            <div class="product-price">
+                                <span class="current-price">₹${product.price?.toLocaleString('en-IN')}</span>
+                                ${product.original_price ? `
+                                    <span class="original-price">₹${product.original_price.toLocaleString('en-IN')}</span>
+                                    <span class="discount">(${product.discount}% off)</span>
+                                ` : ''}
+                            </div>
+
+                            ${product.prime ? `
+                                <div class="product-delivery">
+                                    <i class="fas fa-check-circle" style="color: #00a8e1;"></i>
+                                    <span>Free Prime Delivery</span>
+                                </div>
+                            ` : ''}
+
+                            <div class="product-actions">
+                                <button class="add-to-cart" onclick="addToCart(${product.id})">
+                                    <i class="fas fa-cart-plus"></i> Add to Cart
+                                </button>
+                                <button class="buy-now" onclick="buyNow(${product.id})">
+                                    <i class="fas fa-bolt"></i> Buy Now
+                                </button>
+                            </div>
+
+                            ${product.bank_offers ? `
+                                <div style="margin-top: 1rem;">
+                                    <h3>Available Offers</h3>
+                                    <ul style="margin-top: 0.5rem; list-style: none;">
+                                        ${product.bank_offers.map(offer => `
+                                            <li style="margin-bottom: 0.5rem; color: #28a745;">
+                                                <i class="fas fa-tag"></i> ${offer}
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <div class="product-description">
+                        <h2>Product Description</h2>
+                        <p>${product.description || 'No description available.'}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addToCart(productId) {
+            if (!currentUser) {
+                showNotification('Please login to add items to cart', 'error');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 1500);
+                return;
+            }
+            
+            // Get existing cart
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            
+            // Check if product already in cart
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: productId,
+                    name: document.querySelector('h1').textContent,
+                    price: parseFloat(document.querySelector('.current-price').textContent.replace('₹', '').replace(',', '')),
+                    image: document.querySelector('.product-image img').src,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            showNotification('Added to cart!');
+            loadCartCount();
+        }
+
+        function buyNow(productId) {
+            addToCart(productId);
+            setTimeout(() => {
+                window.location.href = '/checkout';
+            }, 1000);
+        }
+
+        function showError(message) {
+            const container = document.getElementById('productDetails');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 4rem; background: white; border-radius: 8px;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: #dc3545; margin-bottom: 1rem;"></i>
+                    <h2>${message}</h2>
+                    <a href="/" style="display: inline-block; margin-top: 1rem; color: #ff9900;">Continue Shopping</a>
+                </div>
+            `;
+        }
+
+        function loadCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm) {
+                window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`;
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification ' + type;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

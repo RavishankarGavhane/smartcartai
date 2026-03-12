@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Sign-In</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Amazon-style Header */
+        .header {
+            background: #131921;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #ff9900;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .logo-text span {
+            color: #ff9900;
+            font-weight: 700;
+        }
+
+        .logo-suffix {
+            color: #999;
+            font-size: 0.8rem;
+            margin-left: 5px;
+            align-self: flex-end;
+            margin-bottom: 3px;
+        }
+
+        /* Main Container */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #e3e6e6 0%, #ffffff 100%);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            margin: 20px auto;
+        }
+
+        /* Amazon-style Card */
+        .login-card {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px 26px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .login-card h1 {
+            font-size: 28px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: #111;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 5px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 12px;
+            color: #999;
+            font-size: 16px;
+            z-index: 1;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px 10px 40px;
+            border: 1px solid #a6a6a6;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: #fff;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #e77600;
+            box-shadow: 0 0 3px 2px rgba(228,121,17,0.5);
+        }
+
+        .form-control.error {
+            border-color: #c40000;
+            box-shadow: 0 0 0 3px rgba(196,0,0,0.1);
+        }
+
+        .error-message {
+            color: #c40000;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .error-message.show {
+            display: flex;
+        }
+
+        .error-message i {
+            font-size: 14px;
+        }
+
+        /* Remember Me & Forgot Password */
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #111;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #ff9900;
+        }
+
+        .forgot-password {
+            color: #0066c0;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover {
+            color: #c45500;
+            text-decoration: underline;
+        }
+
+        /* Login Button */
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+            border: 1px solid #a88734;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #111;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .btn-login:hover:not(:disabled) {
+            background: linear-gradient(to bottom, #f5d78c, #eeb933);
+            border-color: #9c7e31;
+        }
+
+        .btn-login:focus {
+            outline: none;
+            border-color: #e77600;
+            box-shadow: 0 0 3px 2px rgba(228,121,17,0.5);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Divider */
+        .divider {
+            margin: 20px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #e7e7e7;
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .divider span {
+            background: #fff;
+            padding: 0 10px;
+            color: #767676;
+            font-size: 12px;
+        }
+
+        /* Sign Up Link */
+        .signup-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .signup-text {
+            font-size: 13px;
+            color: #333;
+        }
+
+        .signup-link {
+            color: #0066c0;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .signup-link:hover {
+            color: #c45500;
+            text-decoration: underline;
+        }
+
+        /* New to Amazon section */
+        .new-to-amazon {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .new-to-amazon span {
+            background: #fff;
+            padding: 0 10px;
+            color: #767676;
+            font-size: 12px;
+        }
+
+        .btn-create-account {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to bottom, #f7f8fa, #e7e9ec);
+            border: 1px solid #adb1b8;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #111;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-create-account:hover {
+            background: linear-gradient(to bottom, #e7eaf0, #d9dce1);
+            border-color: #888c92;
+        }
+
+        /* Footer */
+        .footer {
+            background: #ffffff;
+            border-top: 1px solid #ddd;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #0066c0;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: #c45500;
+            text-decoration: underline;
+        }
+
+        .footer-copyright {
+            color: #555;
+        }
+
+        .india-flag {
+            display: inline-block;
+            width: 18px;
+            height: 12px;
+            background: linear-gradient(135deg, #ff9933 33%, #ffffff 33%, #ffffff 66%, #138808 66%);
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 300px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            gap: 10px;
+        }
+
+        .notification.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .notification.error {
+            border-left: 4px solid #dc3545;
+        }
+
+        .notification i {
+            font-size: 20px;
+        }
+
+        .notification.success i {
+            color: #28a745;
+        }
+
+        .notification.error i {
+            color: #dc3545;
+        }
+
+        .notification-message {
+            flex: 1;
+            font-size: 14px;
+            color: #111;
+        }
+
+        .close-notification {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #999;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .close-notification:hover {
+            color: #111;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: #ff9900;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 15px;
+            }
+            
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .footer-links {
+                gap: 15px;
+            }
+        }
+
+        /* Amazon-specific elements */
+        .info-text {
+            font-size: 12px;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        .info-text i {
+            color: #ff9900;
+            margin-right: 5px;
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #767676;
+            font-size: 12px;
+            margin: 20px 0;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e7e7e7;
+        }
+
+        .auth-divider::before {
+            margin-right: 10px;
+        }
+
+        .auth-divider::after {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Amazon-style Header -->
+    <header class="header">
+        <a href="/" class="logo">
+            <i class="fas fa-robot"></i>
+            <span class="logo-text">smart<span>cart</span>ai</span>
+            <span class="logo-suffix">.in</span>
+        </a>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="login-container">
+            <!-- Login Card -->
+            <div class="login-card">
+                <h1>Sign in</h1>
+                
+                <form id="loginForm" onsubmit="return false;">
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label for="email">Email or mobile phone number</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" 
+                                   id="email" 
+                                   name="email" 
+                                   class="form-control" 
+                                   placeholder="Enter your email"
+                                   autocomplete="email"
+                                   required>
+                        </div>
+                        <div class="error-message" id="emailError">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span></span>
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" 
+                                   id="password" 
+                                   name="password" 
+                                   class="form-control" 
+                                   placeholder="Enter your password"
+                                   autocomplete="current-password"
+                                   required>
+                        </div>
+                        <div class="error-message" id="passwordError">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span></span>
+                        </div>
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="remember-forgot">
+                        <label class="remember-me">
+                            <input type="checkbox" name="remember_me" id="rememberMe">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="/auth/forgot-password" class="forgot-password">
+                            Forgot Password?
+                        </a>
+                    </div>
+
+                    <!-- Info Text -->
+                    <div class="info-text">
+                        <i class="fas fa-shield-alt"></i>
+                        This is a secure area. Your information is protected.
+                    </div>
+
+                    <!-- Login Button -->
+                    <button type="submit" class="btn-login" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Sign in
+                    </button>
+
+                    <!-- Terms -->
+                    <div style="margin-top: 15px; font-size: 12px; color: #555;">
+                        By signing in, you agree to our 
+                        <a href="#" style="color: #0066c0; text-decoration: none;">Conditions of Use</a> and 
+                        <a href="#" style="color: #0066c0; text-decoration: none;">Privacy Notice</a>.
+                    </div>
+                </form>
+
+                <!-- Divider -->
+                <div class="auth-divider">
+                    New to SmartCartAI?
+                </div>
+
+                <!-- Create Account Button -->
+                <button class="btn-create-account" onclick="window.location.href='/signup'">
+                    Create your SmartCartAI account
+                </button>
+            </div>
+
+            <!-- Additional Links -->
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="#" style="color: #0066c0; font-size: 13px; text-decoration: none; margin: 0 10px;" 
+                   onclick="showNotification('Coming soon!', 'info')">
+                    <i class="fas fa-lock"></i> Seller sign in
+                </a>
+                <a href="#" style="color: #0066c0; font-size: 13px; text-decoration: none; margin: 0 10px;"
+                   onclick="showNotification('Coming soon!', 'info')">
+                    <i class="fas fa-briefcase"></i> Business sign in
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">About Us</a>
+            <a href="#">Careers</a>
+            <a href="#">Press Releases</a>
+            <a href="#">Amazon Science</a>
+            <a href="#">Seller Program</a>
+            <a href="#">Help</a>
+        </div>
+        <div class="footer-copyright">
+            <span class="india-flag"></span>
+            © 2024 SmartCartAI.com, Inc. or its affiliates
+        </div>
+    </footer>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <i class="fas" id="notificationIcon"></i>
+            <span class="notification-message" id="notificationMessage"></span>
+            <button class="close-notification" onclick="hideNotification()">×</button>
+        </div>
+    </div>
+
+    <script>
+        // Form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Reset errors
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.classList.remove('show');
+                const span = el.querySelector('span');
+                if (span) span.textContent = '';
+            });
+            document.querySelectorAll('.form-control').forEach(el => {
+                el.classList.remove('error');
+            });
+            
+            // Validate form
+            let isValid = true;
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!email) {
+                showFieldError('email', 'Email is required');
+                isValid = false;
+            } else if (!isValidEmail(email)) {
+                showFieldError('email', 'Please enter a valid email address');
+                isValid = false;
+            }
+            
+            if (!password) {
+                showFieldError('password', 'Password is required');
+                isValid = false;
+            } else if (password.length < 6) {
+                showFieldError('password', 'Password must be at least 6 characters');
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Show loading
+            const btn = document.getElementById('loginBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner"></span> Signing in...';
+            btn.disabled = true;
+            
+            try {
+                // Create form data
+                const formData = new FormData();
+                formData.append('email', email);
+                formData.append('password', password);
+                formData.append('remember_me', document.getElementById('rememberMe').checked ? 'on' : 'off');
+                
+                // Submit to server
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin'
+                });
+                
+                if (response.redirected) {
+                    // Success - redirect to dashboard
+                    window.location.href = response.url;
+                } else {
+                    const data = await response.json();
+                    
+                    if (!data.success) {
+                        if (data.message.includes('Invalid email or password')) {
+                            showFieldError('email', 'Invalid email or password');
+                            showFieldError('password', 'Invalid email or password');
+                            showNotification('Invalid email or password. Please try again.', 'error');
+                        } else {
+                            showNotification(data.message, 'error');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showNotification('Network error. Please check your connection and try again.', 'error');
+            } finally {
+                // Restore button
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // Email validation helper
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Show field error
+        function showFieldError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(fieldId + 'Error');
+            const errorSpan = errorDiv.querySelector('span');
+            
+            field.classList.add('error');
+            errorSpan.textContent = message;
+            errorDiv.classList.add('show');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const icon = document.getElementById('notificationIcon');
+            const messageEl = document.getElementById('notificationMessage');
+            
+            // Set icon based on type
+            icon.className = 'fas';
+            if (type === 'success') {
+                icon.classList.add('fa-check-circle');
+            } else if (type === 'error') {
+                icon.classList.add('fa-exclamation-circle');
+            } else {
+                icon.classList.add('fa-info-circle');
+            }
+            
+            notification.className = 'notification ' + type;
+            messageEl.textContent = message;
+            notification.classList.add('show');
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                hideNotification();
+            }, 5000);
+        }
+
+        // Hide notification
+        function hideNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('show');
+        }
+
+        // Check if user is already logged in
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/auth/me', {
+                    credentials: 'same-origin'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    // User is already logged in, redirect to dashboard
+                    window.location.href = '/dashboard';
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+            }
+        }
+
+        // Add input validation on blur
+        document.getElementById('email').addEventListener('blur', function() {
+            const email = this.value.trim();
+            const errorDiv = document.getElementById('emailError');
+            
+            if (email && !isValidEmail(email)) {
+                showFieldError('email', 'Please enter a valid email address');
+            } else if (!email) {
+                // Clear error if field is empty (will be caught on submit)
+                this.classList.remove('error');
+                errorDiv.classList.remove('show');
+            } else {
+                this.classList.remove('error');
+                errorDiv.classList.remove('show');
+            }
+        });
+
+        document.getElementById('password').addEventListener('blur', function() {
+            const password = this.value;
+            const errorDiv = document.getElementById('passwordError');
+            
+            if (password && password.length < 6) {
+                showFieldError('password', 'Password must be at least 6 characters');
+            } else if (!password) {
+                this.classList.remove('error');
+                errorDiv.classList.remove('show');
+            } else {
+                this.classList.remove('error');
+                errorDiv.classList.remove('show');
+            }
+        });
+
+        // Clear error on input
+        document.getElementById('email').addEventListener('input', function() {
+            this.classList.remove('error');
+            document.getElementById('emailError').classList.remove('show');
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            this.classList.remove('error');
+            document.getElementById('passwordError').classList.remove('show');
+        });
+
+        // Add demo credentials for testing (remove in production)
+        function fillDemoCredentials() {
+            document.getElementById('email').value = 'test@example.com';
+            document.getElementById('password').value = 'password123';
+        }
+
+        // Uncomment below line for development testing
+        // window.addEventListener('load', fillDemoCredentials);
+
+        // Run on page load
+        checkAuthStatus();
+    </script>
+</body>
+</html>

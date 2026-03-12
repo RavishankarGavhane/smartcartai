@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details - SmartCartAI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: #e3e6e6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header (same as other pages) */
+        .header {
+            background: linear-gradient(135deg, #131921 0%, #232f3e 100%);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 0.5rem 2rem;
+        }
+
+        .nav-row1 {
+            display: grid;
+            grid-template-columns: auto auto 1fr auto auto;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ff9900;
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            flex: 1;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: none;
+            outline: none;
+        }
+
+        .search-btn {
+            background: #ff9900;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .cart-icon {
+            position: relative;
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ff9900;
+            color: #131921;
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            width: 100%;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            margin-bottom: 2rem;
+            color: #555;
+        }
+
+        .breadcrumb a {
+            color: #007185;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: #ff9900;
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            margin: 0 0.5rem;
+        }
+
+        /* Order Header */
+        .order-header {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .order-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .order-title h1 {
+            font-size: 1.8rem;
+            color: #232f3e;
+        }
+
+        .order-status-badge {
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-confirmed {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-processing {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .status-shipped {
+            background: #e8eaf6;
+            color: #3f51b5;
+        }
+
+        .status-delivered {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+
+        .status-cancelled {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .order-meta {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            color: #666;
+        }
+
+        .order-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .order-meta-label {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .order-meta-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #232f3e;
+        }
+
+        /* Tracking Timeline */
+        .tracking-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .tracking-title {
+            font-size: 1.2rem;
+            color: #232f3e;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ddd;
+            z-index: 1;
+        }
+
+        .timeline-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            flex: 1;
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            color: #999;
+        }
+
+        .timeline-step.completed .step-icon {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+
+        .timeline-step.in-progress .step-icon {
+            border-color: #ff9900;
+            color: #ff9900;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255,153,0,0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255,153,0,0); }
+            100% { box-shadow: 0 0 0 0 rgba(255,153,0,0); }
+        }
+
+        .step-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #232f3e;
+            margin-bottom: 0.2rem;
+        }
+
+        .step-date {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Order Items */
+        .order-items-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: #232f3e;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .order-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 120px;
+            height: 120px;
+            flex-shrink: 0;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #232f3e;
+            margin-bottom: 0.5rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .item-name:hover {
+            color: #ff9900;
+        }
+
+        .item-price {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #b12704;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-quantity {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-total {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #232f3e;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            padding: 0.6rem 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            background: #ffd814;
+            border-color: #ff9900;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #b12704;
+        }
+
+        .summary-label {
+            color: #666;
+        }
+
+        .summary-value {
+            font-weight: 500;
+        }
+
+        /* Shipping Address */
+        .address-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .address-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff9900;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #131921 0%, #232f3e 100%);
+            color: white;
+            margin-top: 3rem;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: #ff9900;
+        }
+
+        .footer-section a {
+            color: #ddd;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a:hover {
+            color: #ff9900;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #3b4a5c;
+        }
+
+        .india-flag {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #ff9933 33%, #ffffff 33%, #ffffff 66%, #138808 66%);
+            border-radius: 3px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .order-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .timeline {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .timeline::before {
+                display: none;
+            }
+            
+            .timeline-step {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                text-align: left;
+            }
+            
+            .step-icon {
+                margin: 0;
+            }
+            
+            .order-item {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .item-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="nav-row1">
+                <a href="/" class="logo">
+                    <i class="fas fa-robot"></i>
+                    SmartCartAI
+                </a>
+                
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search products...">
+                    <button class="search-btn" onclick="searchProducts()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                
+                <div class="nav-right">
+                    <a href="/dashboard" class="nav-item">
+                        <span>Hello, <span id="userFirstName">User</span></span>
+                        <span>Your Account</span>
+                    </a>
+                    
+                    <a href="/orders" class="nav-item">
+                        <span>Returns</span>
+                        <span>& Orders</span>
+                    </a>
+                    
+                    <div class="cart-icon" onclick="window.location.href='/cart'">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="breadcrumb">
+            <a href="/">Home</a>
+            <span>›</span>
+            <a href="/orders">Your Orders</a>
+            <span>›</span>
+            <span id="orderNumberDisplay">Order Details</span>
+        </div>
+
+        <div id="orderDetails">
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p style="margin-top: 1rem;">Loading order details...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Get to Know Us</h3>
+                <a href="#">About SmartCartAI</a>
+                <a href="#">Careers</a>
+                <a href="#">Press Releases</a>
+            </div>
+            <div class="footer-section">
+                <h3>Connect with Us</h3>
+                <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+                <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>
+                <span class="india-flag"></span>
+                © 2024 SmartCartAI.com. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        let currentUser = null;
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderNumber = window.location.pathname.split('/').pop();
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadUserData();
+            await loadOrderDetails();
+            loadCartCount();
+        });
+
+        async function loadUserData() {
+            try {
+                const response = await fetch('/auth/me', {
+                    credentials: 'same-origin'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentUser = data.user;
+                    document.getElementById('userFirstName').textContent = currentUser.firstName;
+                } else {
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        async function loadOrderDetails() {
+            try {
+                const response = await fetch(`/api/orders/${orderNumber}`, {
+                    credentials: 'same-origin'
+                });
+                
+                if (response.ok) {
+                    const order = await response.json();
+                    displayOrderDetails(order);
+                } else {
+                    showError('Order not found');
+                }
+            } catch (error) {
+                console.error('Error loading order:', error);
+                showError('Failed to load order details');
+            }
+        }
+
+        function displayOrderDetails(order) {
+            const container = document.getElementById('orderDetails');
+            document.getElementById('orderNumberDisplay').textContent = `Order #${order.order_number}`;
+            
+            const statusClass = `status-${order.order_status}`;
+            const statusIcon = getStatusIcon(order.order_status);
+            
+            let timelineHtml = '';
+            if (order.tracking_steps) {
+                timelineHtml = `
+                    <div class="tracking-section">
+                        <h2 class="tracking-title">Track Package</h2>
+                        <div class="timeline">
+                            ${order.tracking_steps.map(step => `
+                                <div class="timeline-step ${step.status}">
+                                    <div class="step-icon">
+                                        <i class="fas ${step.status === 'completed' ? 'fa-check' : 
+                                                          step.status === 'in_progress' ? 'fa-spinner fa-spin' : 'fa-clock'}"></i>
+                                    </div>
+                                    <div class="step-name">${step.name}</div>
+                                    <div class="step-date">${step.date}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `
+                <div class="order-header">
+                    <div class="order-title">
+                        <h1>Order #${order.order_number}</h1>
+                        <div class="order-status-badge ${statusClass}">
+                            <i class="fas ${statusIcon}"></i>
+                            ${order.order_status.toUpperCase()}
+                        </div>
+                    </div>
+                    <div class="order-meta">
+                        <div class="order-meta-item">
+                            <span class="order-meta-label">ORDER PLACED</span>
+                            <span class="order-meta-value">${order.order_date || 'N/A'}</span>
+                        </div>
+                        <div class="order-meta-item">
+                            <span class="order-meta-label">TOTAL</span>
+                            <span class="order-meta-value">₹${order.final_amount.toLocaleString('en-IN')}</span>
+                        </div>
+                        <div class="order-meta-item">
+                            <span class="order-meta-label">PAYMENT METHOD</span>
+                            <span class="order-meta-value">${formatPaymentMethod(order.payment_method)}</span>
+                        </div>
+                        <div class="order-meta-item">
+                            <span class="order-meta-label">TRANSACTION ID</span>
+                            <span class="order-meta-value">${order.transaction_id || 'N/A'}</span>
+                        </div>
+                    </div>
+                </div>
+
+                ${timelineHtml}
+
+                <div class="order-items-section">
+                    <h2 class="section-title">Order Items</h2>
+                    <div class="order-items">
+                        ${order.items.map(item => `
+                            <div class="order-item">
+                                <div class="item-image">
+                                    <img src="${item.image || 'https://via.placeholder.com/120'}" 
+                                         alt="${item.name}"
+                                         onerror="this.src='https://via.placeholder.com/120?text=Product'">
+                                </div>
+                                <div class="item-details">
+                                    <a href="/product/${item.product_id}" class="item-name">${item.name}</a>
+                                    <div class="item-price">₹${item.price.toLocaleString('en-IN')}</div>
+                                    <div class="item-quantity">Quantity: ${item.quantity}</div>
+                                    <div class="item-total">Item Total: ₹${item.total.toLocaleString('en-IN')}</div>
+                                    <div class="item-actions">
+                                        <button class="action-btn" onclick="buyAgain(${item.product_id})">
+                                            <i class="fas fa-redo-alt"></i> Buy it again
+                                        </button>
+                                        <button class="action-btn" onclick="writeReview(${item.product_id})">
+                                            <i class="fas fa-star"></i> Write review
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+                    <div class="order-summary">
+                        <h2 class="section-title">Shipping Address</h2>
+                        <div class="address-card">
+                            <p><strong>${order.shipping_address.recipient_name}</strong></p>
+                            <p>${order.shipping_address.address_line1}</p>
+                            ${order.shipping_address.address_line2 ? `<p>${order.shipping_address.address_line2}</p>` : ''}
+                            <p>${order.shipping_address.city}, ${order.shipping_address.state} - ${order.shipping_address.zip_code}</p>
+                            <p>Phone: ${order.shipping_address.phone}</p>
+                        </div>
+                    </div>
+
+                    <div class="order-summary">
+                        <h2 class="section-title">Order Summary</h2>
+                        <div class="summary-row">
+                            <span class="summary-label">Items Total:</span>
+                            <span class="summary-value">₹${order.total_amount.toLocaleString('en-IN')}</span>
+                        </div>
+                        ${order.discount_amount > 0 ? `
+                        <div class="summary-row" style="color: #28a745;">
+                            <span class="summary-label">Discount:</span>
+                            <span class="summary-value">-₹${order.discount_amount.toLocaleString('en-IN')}</span>
+                        </div>
+                        ` : ''}
+                        <div class="summary-row">
+                            <span class="summary-label">Shipping:</span>
+                            <span class="summary-value">Free</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Total:</span>
+                            <span class="summary-value">₹${order.final_amount.toLocaleString('en-IN')}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getStatusIcon(status) {
+            switch(status) {
+                case 'delivered': return 'fa-check-circle';
+                case 'shipped': return 'fa-shipping-fast';
+                case 'processing': return 'fa-cog fa-spin';
+                case 'confirmed': return 'fa-check';
+                case 'cancelled': return 'fa-times-circle';
+                case 'returned': return 'fa-undo';
+                default: return 'fa-clock';
+            }
+        }
+
+        function formatPaymentMethod(method) {
+            const methods = {
+                'credit_card': 'Credit Card',
+                'debit_card': 'Debit Card',
+                'upi': 'UPI',
+                'netbanking': 'Net Banking',
+                'cod': 'Cash on Delivery'
+            };
+            return methods[method] || method;
+        }
+
+        function showError(message) {
+            const container = document.getElementById('orderDetails');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 4rem; background: white; border-radius: 8px;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: #dc3545; margin-bottom: 1rem;"></i>
+                    <h2>${message}</h2>
+                    <a href="/orders" style="display: inline-block; margin-top: 1rem; color: #ff9900;">Back to Orders</a>
+                </div>
+            `;
+        }
+
+        function buyAgain(productId) {
+            window.location.href = `/product/${productId}`;
+        }
+
+        function writeReview(productId) {
+            alert('Review feature coming soon!');
+        }
+
+        function loadCartCount() {
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                const cart = JSON.parse(savedCart);
+                const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+                document.getElementById('cartCount').textContent = count;
+            }
+        }
+
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm) {
+                window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`;
+            }
+        }
+    </script>
+</body>
+</html>

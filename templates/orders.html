@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Orders - SmartCartAI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: #e3e6e6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* SmartCartAI Header */
+        .header {
+            background: linear-gradient(135deg, #131921 0%, #232f3e 100%);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 0.5rem 2rem;
+        }
+
+        .nav-row1 {
+            display: grid;
+            grid-template-columns: auto auto 1fr auto auto;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ff9900;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #ff9900;
+        }
+
+        .logo span {
+            font-size: 0.8rem;
+            color: #ddd;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid transparent;
+        }
+
+        .location:hover {
+            border-color: #ff9900;
+            background: #3b4a5c;
+        }
+
+        .location-text {
+            font-size: 0.7rem;
+            color: #ccc;
+        }
+
+        .location strong {
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .search-bar {
+            display: flex;
+            flex: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: border 0.2s;
+        }
+
+        .search-bar:focus-within {
+            border-color: #ff9900;
+        }
+
+        .category-select {
+            background: #f3f3f3;
+            border: none;
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+            width: 150px;
+            border-right: 1px solid #ddd;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            background: #ff9900;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .search-btn:hover {
+            background: #ffb700;
+        }
+
+        .search-btn i {
+            color: #232f3e;
+            font-size: 1.2rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-item:hover {
+            border-color: #ff9900;
+            background: #3b4a5c;
+        }
+
+        .nav-item span:first-child {
+            font-size: 0.7rem;
+            color: #ccc;
+        }
+
+        .nav-item span:last-child {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .cart-icon {
+            position: relative;
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            text-decoration: none;
+        }
+
+        .cart-icon:hover {
+            border-color: #ff9900;
+            background: #3b4a5c;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ff9900;
+            color: #131921;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
+            border: 2px solid #131921;
+        }
+
+        .nav-row2 {
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 0.3rem 0;
+            background: #232f3e;
+            border-radius: 4px;
+        }
+
+        .nav-row2 a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            border: 1px solid transparent;
+        }
+
+        .nav-row2 a:hover {
+            border-color: #ff9900;
+            background: #3b4a5c;
+        }
+
+        .nav-row2 a i {
+            margin-right: 0.3rem;
+        }
+
+        .nav-row2 .prime-badge {
+            color: #00a8e1;
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            width: 100%;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            color: #232f3e;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .page-header h1 i {
+            color: #ff9900;
+            margin-right: 0.5rem;
+        }
+
+        /* Filters */
+        .filters-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 0.6rem 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .filter-tab:hover {
+            border-color: #ff9900;
+            color: #ff9900;
+        }
+
+        .filter-tab.active {
+            background: #ff9900;
+            color: white;
+            border-color: #ff9900;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-box input {
+            padding: 0.6rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 250px;
+            font-size: 0.9rem;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #ff9900;
+        }
+
+        .search-box button {
+            padding: 0.6rem 1.2rem;
+            background: #ffd814;
+            border: 1px solid #f7ca00;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .search-box button:hover {
+            background: #f7ca00;
+        }
+
+        /* Orders Container */
+        .orders-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            min-height: 400px;
+        }
+
+        /* Order Card */
+        .order-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .order-card:hover {
+            border-color: #ff9900;
+            box-shadow: 0 5px 15px rgba(255,153,0,0.2);
+        }
+
+        .order-header {
+            background: #f0f2f2;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 1px solid #e7e7e7;
+        }
+
+        .order-header-left {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .order-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .order-info-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .order-info-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #232f3e;
+        }
+
+        .order-info-value.order-number {
+            color: #007185;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .order-info-value.order-number:hover {
+            color: #ff9900;
+            text-decoration: underline;
+        }
+
+        .order-status-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-confirmed {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-processing {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .status-shipped {
+            background: #e8eaf6;
+            color: #3f51b5;
+        }
+
+        .status-delivered {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+
+        .status-cancelled {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .status-returned {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .order-body {
+            padding: 1.5rem;
+        }
+
+        .order-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .order-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #f0f0f0;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .order-item:hover {
+            background: #f8f9fa;
+        }
+
+        .item-image {
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #232f3e;
+            margin-bottom: 0.5rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .item-name:hover {
+            color: #ff9900;
+            text-decoration: underline;
+        }
+
+        .item-price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #b12704;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-quantity {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-delivery {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #28a745;
+            font-size: 0.9rem;
+        }
+
+        .item-delivery i {
+            font-size: 1rem;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .item-action-btn {
+            padding: 0.5rem 1rem;
+            background: none;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .item-action-btn:hover {
+            background: #ffd814;
+            border-color: #ff9900;
+            color: #232f3e;
+        }
+
+        .item-action-btn.buy-again {
+            background: #ffd814;
+            border-color: #f7ca00;
+        }
+
+        .item-action-btn.buy-again:hover {
+            background: #f7ca00;
+        }
+
+        .order-footer {
+            padding: 1rem 1.5rem;
+            background: #f8f9fa;
+            border-top: 1px solid #e7e7e7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .order-total {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .order-total-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .order-total-amount {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #b12704;
+        }
+
+        .order-footer-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .order-footer-btn {
+            padding: 0.6rem 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .order-footer-btn:hover {
+            background: #ffd814;
+            border-color: #ff9900;
+            color: #232f3e;
+        }
+
+        .order-footer-btn.danger:hover {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h2 {
+            font-size: 1.8rem;
+            color: #232f3e;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+        }
+
+        .empty-state p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .empty-state-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #ffd814;
+            border: 1px solid #f7ca00;
+            border-radius: 20px;
+            font-weight: 600;
+            text-decoration: none;
+            color: #232f3e;
+            transition: all 0.2s;
+        }
+
+        .empty-state-btn:hover {
+            background: #f7ca00;
+            transform: scale(1.02);
+        }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff9900;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 40px;
+        }
+
+        .page-btn:hover:not(.disabled) {
+            border-color: #ff9900;
+            color: #ff9900;
+        }
+
+        .page-btn.active {
+            background: #ff9900;
+            color: white;
+            border-color: #ff9900;
+        }
+
+        .page-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1002;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            color: #232f3e;
+            font-size: 1.5rem;
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-body textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-body textarea:focus {
+            outline: none;
+            border-color: #ff9900;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-btn.confirm {
+            background: #ffd814;
+            border: 1px solid #f7ca00;
+        }
+
+        .modal-btn.confirm:hover {
+            background: #f7ca00;
+        }
+
+        .modal-btn.cancel {
+            background: #f0f2f2;
+            border: 1px solid #ddd;
+        }
+
+        .modal-btn.cancel:hover {
+            background: #e7e7e7;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 300px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1003;
+            overflow: hidden;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            gap: 10px;
+        }
+
+        .notification.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .notification.error {
+            border-left: 4px solid #dc3545;
+        }
+
+        .notification i {
+            font-size: 20px;
+        }
+
+        .notification.success i {
+            color: #28a745;
+        }
+
+        .notification.error i {
+            color: #dc3545;
+        }
+
+        .notification-message {
+            flex: 1;
+            font-size: 14px;
+            color: #111;
+        }
+
+        .close-notification {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .close-notification:hover {
+            color: #111;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #131921 0%, #232f3e 100%);
+            color: white;
+            margin-top: 3rem;
+            padding: 3rem 0 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff9933, #ffffff, #138808);
+        }
+
+        .footer-content {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: #ff9900;
+        }
+
+        .footer-section a {
+            color: #ddd;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: #ff9900;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #3b4a5c;
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        .india-flag {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #ff9933 33%, #ffffff 33%, #ffffff 66%, #138808 66%);
+            border-radius: 3px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .nav-row1 {
+                grid-template-columns: auto 1fr auto auto;
+                gap: 1rem;
+            }
+            
+            .location {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-row1 {
+                grid-template-columns: auto 1fr auto;
+            }
+            
+            .nav-right .nav-item:not(:first-child) {
+                display: none;
+            }
+            
+            .order-header-left {
+                gap: 1rem;
+            }
+            
+            .order-item {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .item-actions {
+                justify-content: center;
+            }
+            
+            .order-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .filters-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .search-box input {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-row2 {
+                overflow-x: auto;
+                padding: 0.3rem 1rem;
+                gap: 1rem;
+            }
+            
+            .nav-row2 a {
+                white-space: nowrap;
+            }
+            
+            .filter-tabs {
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+            
+            .filter-tab {
+                white-space: nowrap;
+            }
+            
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="nav-row1">
+                <a href="/" class="logo">
+                    <i class="fas fa-robot"></i>
+                    SmartCartAI
+                    <span>.in</span>
+                </a>
+                
+                <div class="location" onclick="showLocationModal()">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <div class="location-text">Deliver to</div>
+                        <strong><span id="deliveryLocation">Mumbai 400001</span></strong>
+                    </div>
+                </div>
+                
+                <div class="search-bar">
+                    <select class="category-select" id="searchCategory">
+                        <option value="all">All Categories</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="footwear">Footwear</option>
+                        <option value="home">Home & Kitchen</option>
+                        <option value="books">Books</option>
+                        <option value="sports">Sports</option>
+                        <option value="toys">Toys & Games</option>
+                    </select>
+                    <input type="text" id="searchInput" placeholder="Search products...">
+                    <button class="search-btn" onclick="searchProducts()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                
+                <div class="nav-right">
+                    <a href="/dashboard" class="nav-item" id="userNavItem">
+                        <span>Hello, <span id="userFirstName">User</span></span>
+                        <span>Your Account <i class="fas fa-caret-down"></i></span>
+                    </a>
+                    
+                    <a href="/orders" class="nav-item">
+                        <span>Returns</span>
+                        <span>& Orders</span>
+                    </a>
+                    
+                    <div class="cart-icon" onclick="window.location.href='/cart'">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-row2">
+                <a href="#"><i class="fas fa-bars"></i> All</a>
+                <a href="#" class="prime-badge"><i class="fab fa-amazon"></i> Prime</a>
+                <a href="#">🇮🇳 Freedom Sale</a>
+                <a href="/deals">Today's Deals</a>
+                <a href="#">Customer Service</a>
+                <a href="#">Gift Cards</a>
+                <a href="#">Sell</a>
+                <a href="#">SmartCartAI Pay</a>
+                <a href="#" style="color: #ff9900;">🔥 Great Indian Festival</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <h1><i class="fas fa-box"></i> Your Orders</h1>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-section">
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="filterOrders('all')">All Orders</button>
+                <button class="filter-tab" onclick="filterOrders('confirmed')">Confirmed</button>
+                <button class="filter-tab" onclick="filterOrders('processing')">Processing</button>
+                <button class="filter-tab" onclick="filterOrders('shipped')">Shipped</button>
+                <button class="filter-tab" onclick="filterOrders('delivered')">Delivered</button>
+                <button class="filter-tab" onclick="filterOrders('cancelled')">Cancelled</button>
+                <button class="filter-tab" onclick="filterOrders('returned')">Returned</button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchOrder" placeholder="Search by order ID or product">
+                <button onclick="searchOrders()"><i class="fas fa-search"></i> Search</button>
+            </div>
+        </div>
+
+        <!-- Orders Container -->
+        <div class="orders-container" id="ordersContainer">
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p style="margin-top: 1rem; color: #666;">Loading your orders...</p>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- Return Modal -->
+    <div class="modal" id="returnModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Return Order</h2>
+            </div>
+            <div class="modal-body">
+                <textarea id="returnReason" placeholder="Please tell us the reason for return..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeReturnModal()">Cancel</button>
+                <button class="modal-btn confirm" onclick="submitReturn()">Submit Return</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancel Modal -->
+    <div class="modal" id="cancelModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Cancel Order</h2>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to cancel this order?</p>
+                <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">This action cannot be undone.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeCancelModal()">No, Keep Order</button>
+                <button class="modal-btn confirm" onclick="submitCancel()">Yes, Cancel Order</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Get to Know Us</h3>
+                <a href="#">About SmartCartAI</a>
+                <a href="#">Careers</a>
+                <a href="#">Press Releases</a>
+                <a href="#">SmartCartAI Cares</a>
+                <a href="#">Gift a Smile</a>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Connect with Us</h3>
+                <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+                <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Make Money with Us</h3>
+                <a href="#">Sell on SmartCartAI</a>
+                <a href="#">Become an Affiliate</a>
+                <a href="#">Fulfilment by SmartCartAI</a>
+                <a href="#">Advertise Your Products</a>
+                <a href="#">SmartCartAI Pay on Merchants</a>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Let Us Help You</h3>
+                <a href="#">Your Account</a>
+                <a href="#">Returns Centre</a>
+                <a href="#">100% Purchase Protection</a>
+                <a href="#">SmartCartAI App Download</a>
+                <a href="#">Help Centre</a>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>
+                <span class="india-flag"></span>
+                © 2024 SmartCartAI.com. All rights reserved. An AI-Powered Shopping Experience
+            </p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">
+                <i class="fas fa-robot"></i> Made with <i class="fas fa-heart" style="color: #ff9900;"></i> in India
+            </p>
+        </div>
+    </footer>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <i class="fas" id="notificationIcon"></i>
+            <span class="notification-message" id="notificationMessage"></span>
+            <button class="close-notification" onclick="hideNotification()">×</button>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let allOrders = [];
+        let currentFilter = 'all';
+        let currentPage = 1;
+        let totalPages = 1;
+        let selectedOrderNumber = null;
+
+        // Load user data on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadUserData();
+            await loadOrders();
+            loadCartCount();
+        });
+
+        async function loadUserData() {
+            try {
+                const response = await fetch('/auth/me', {
+                    credentials: 'same-origin'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentUser = data.user;
+                    document.getElementById('userFirstName').textContent = currentUser.firstName;
+                } else {
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                showNotification('Error loading user data', 'error');
+            }
+        }
+
+        async function loadOrders() {
+            try {
+                const response = await fetch(`/api/orders?status=${currentFilter}&page=${currentPage}`, {
+                    credentials: 'same-origin'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    allOrders = data.orders;
+                    totalPages = data.total_pages;
+                    displayOrders();
+                    displayPagination();
+                } else {
+                    showNotification('Failed to load orders', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                showNotification('Error loading orders', 'error');
+            }
+        }
+
+        function displayOrders() {
+            const container = document.getElementById('ordersContainer');
+            
+            if (allOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <h2>No orders found</h2>
+                        <p>You haven't placed any orders yet. Start shopping to see your orders here!</p>
+                        <a href="/" class="empty-state-btn">
+                            <i class="fas fa-shopping-cart"></i> Start Shopping
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = allOrders.map(order => {
+                const orderDate = order.order_date || 'N/A';
+                const statusClass = `status-${order.order_status}`;
+                const statusIcon = getStatusIcon(order.order_status);
+                
+                return `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="order-header-left">
+                                <div class="order-info-item">
+                                    <span class="order-info-label">ORDER PLACED</span>
+                                    <span class="order-info-value">${orderDate}</span>
+                                </div>
+                                <div class="order-info-item">
+                                    <span class="order-info-label">TOTAL</span>
+                                    <span class="order-info-value">₹${order.final_amount.toLocaleString('en-IN')}</span>
+                                </div>
+                                <div class="order-info-item">
+                                    <span class="order-info-label">SHIP TO</span>
+                                    <span class="order-info-value">${currentUser?.firstName || 'User'}</span>
+                                </div>
+                                <div class="order-info-item">
+                                    <span class="order-info-label">ORDER #</span>
+                                    <span class="order-info-value order-number" onclick="viewOrderDetails('${order.order_number}')">${order.order_number}</span>
+                                </div>
+                            </div>
+                            <div class="order-status-badge ${statusClass}">
+                                <i class="fas ${statusIcon}"></i>
+                                ${order.order_status.toUpperCase()}
+                            </div>
+                        </div>
+                        
+                        <div class="order-body">
+                            <div class="order-items">
+                                ${order.items.map(item => `
+                                    <div class="order-item">
+                                        <div class="item-image">
+                                            <img src="${item.image || 'https://via.placeholder.com/100'}" 
+                                                 alt="${item.name}"
+                                                 onerror="this.src='https://via.placeholder.com/100?text=Product'">
+                                        </div>
+                                        <div class="item-details">
+                                            <a href="/product/${item.product_id}" class="item-name">${item.name}</a>
+                                            <div class="item-price">₹${item.price.toLocaleString('en-IN')}</div>
+                                            <div class="item-quantity">Quantity: ${item.quantity}</div>
+                                            <div class="item-delivery">
+                                                <i class="fas fa-truck"></i>
+                                                <span>Estimated delivery: ${order.estimated_delivery || 'Coming soon'}</span>
+                                            </div>
+                                            <div class="item-actions">
+                                                <button class="item-action-btn buy-again" onclick="buyAgain(${item.product_id})">
+                                                    <i class="fas fa-redo-alt"></i> Buy it again
+                                                </button>
+                                                <button class="item-action-btn" onclick="viewProduct(${item.product_id})">
+                                                    <i class="fas fa-eye"></i> View item
+                                                </button>
+                                                <button class="item-action-btn" onclick="writeReview(${item.product_id})">
+                                                    <i class="fas fa-star"></i> Write review
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="order-footer">
+                            <div class="order-total">
+                                <span class="order-total-label">Order Total:</span>
+                                <span class="order-total-amount">₹${order.final_amount.toLocaleString('en-IN')}</span>
+                            </div>
+                            <div class="order-footer-actions">
+                                ${order.can_cancel ? `
+                                    <button class="order-footer-btn danger" onclick="openCancelModal('${order.order_number}')">
+                                        <i class="fas fa-times-circle"></i> Cancel Order
+                                    </button>
+                                ` : ''}
+                                ${order.can_return ? `
+                                    <button class="order-footer-btn" onclick="openReturnModal('${order.order_number}')">
+                                        <i class="fas fa-undo-alt"></i> Return
+                                    </button>
+                                ` : ''}
+                                ${order.can_reorder ? `
+                                    <button class="order-footer-btn" onclick="reorder('${order.order_number}')">
+                                        <i class="fas fa-redo-alt"></i> Reorder
+                                    </button>
+                                ` : ''}
+                                <button class="order-footer-btn" onclick="viewInvoice('${order.order_number}')">
+                                    <i class="fas fa-file-invoice"></i> Invoice
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getStatusIcon(status) {
+            switch(status) {
+                case 'delivered': return 'fa-check-circle';
+                case 'shipped': return 'fa-shipping-fast';
+                case 'processing': return 'fa-cog fa-spin';
+                case 'confirmed': return 'fa-check';
+                case 'cancelled': return 'fa-times-circle';
+                case 'returned': return 'fa-undo';
+                default: return 'fa-clock';
+            }
+        }
+
+        function displayPagination() {
+            const paginationEl = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                paginationEl.innerHTML = '';
+                return;
+            }
+
+            let paginationHTML = '';
+            
+            // Previous button
+            paginationHTML += `<button class="page-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                onclick="${currentPage > 1 ? `changePage(${currentPage - 1})` : ''}">
+                <i class="fas fa-chevron-left"></i>
+            </button>`;
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                    paginationHTML += `<button class="page-btn ${i === currentPage ? 'active' : ''}" 
+                        onclick="changePage(${i})">${i}</button>`;
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    paginationHTML += `<span class="page-btn disabled">...</span>`;
+                }
+            }
+
+            // Next button
+            paginationHTML += `<button class="page-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                onclick="${currentPage < totalPages ? `changePage(${currentPage + 1})` : ''}">
+                <i class="fas fa-chevron-right"></i>
+            </button>`;
+
+            paginationEl.innerHTML = paginationHTML;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            loadOrders();
+        }
+
+        function filterOrders(filter) {
+            currentFilter = filter;
+            currentPage = 1;
+            
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadOrders();
+        }
+
+        async function searchOrders() {
+            const searchTerm = document.getElementById('searchOrder').value;
+            if (!searchTerm) {
+                loadOrders();
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/orders?search=${encodeURIComponent(searchTerm)}&page=1`, {
+                    credentials: 'same-origin'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    allOrders = data.orders;
+                    totalPages = data.total_pages;
+                    currentPage = 1;
+                    displayOrders();
+                    displayPagination();
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                showNotification('Search failed', 'error');
+            }
+        }
+
+        function viewOrderDetails(orderNumber) {
+            window.location.href = `/orders/${orderNumber}`;
+        }
+
+        function openCancelModal(orderNumber) {
+            selectedOrderNumber = orderNumber;
+            document.getElementById('cancelModal').classList.add('active');
+        }
+
+        function closeCancelModal() {
+            document.getElementById('cancelModal').classList.remove('active');
+            selectedOrderNumber = null;
+        }
+
+        async function submitCancel() {
+            if (!selectedOrderNumber) return;
+            
+            try {
+                const response = await fetch(`/api/orders/${selectedOrderNumber}/cancel`, {
+                    method: 'POST',
+                    credentials: 'same-origin'
+                });
+                
+                if (response.ok) {
+                    showNotification('Order cancelled successfully', 'success');
+                    closeCancelModal();
+                    loadOrders();
+                } else {
+                    showNotification('Failed to cancel order', 'error');
+                }
+            } catch (error) {
+                console.error('Cancel error:', error);
+                showNotification('Failed to cancel order', 'error');
+            }
+        }
+
+        function openReturnModal(orderNumber) {
+            selectedOrderNumber = orderNumber;
+            document.getElementById('returnModal').classList.add('active');
+        }
+
+        function closeReturnModal() {
+            document.getElementById('returnModal').classList.remove('active');
+            document.getElementById('returnReason').value = '';
+            selectedOrderNumber = null;
+        }
+
+        async function submitReturn() {
+            const reason = document.getElementById('returnReason').value;
+            if (!reason) {
+                showNotification('Please provide a reason for return', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/orders/${selectedOrderNumber}/return?reason=${encodeURIComponent(reason)}`, {
+                    method: 'POST',
+                    credentials: 'same-origin'
+                });
+                
+                if (response.ok) {
+                    showNotification('Return request submitted successfully', 'success');
+                    closeReturnModal();
+                    loadOrders();
+                } else {
+                    showNotification('Failed to submit return request', 'error');
+                }
+            } catch (error) {
+                console.error('Return error:', error);
+                showNotification('Failed to submit return request', 'error');
+            }
+        }
+
+        async function reorder(orderNumber) {
+            try {
+                const response = await fetch(`/api/orders/${orderNumber}/reorder`, {
+                    method: 'POST',
+                    credentials: 'same-origin'
+                });
+                
+                if (response.ok) {
+                    showNotification('Items added to cart', 'success');
+                    loadCartCount();
+                    setTimeout(() => {
+                        window.location.href = '/cart';
+                    }, 1500);
+                } else {
+                    showNotification('Failed to reorder items', 'error');
+                }
+            } catch (error) {
+                console.error('Reorder error:', error);
+                showNotification('Failed to reorder items', 'error');
+            }
+        }
+
+        function buyAgain(productId) {
+            window.location.href = `/product/${productId}`;
+        }
+
+        function viewProduct(productId) {
+            window.location.href = `/product/${productId}`;
+        }
+
+        function writeReview(productId) {
+            showNotification('Review feature coming soon!', 'info');
+        }
+
+        function viewInvoice(orderNumber) {
+            showNotification(`Invoice for order ${orderNumber}`, 'info');
+        }
+
+        function loadCartCount() {
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                const cart = JSON.parse(savedCart);
+                const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+                document.getElementById('cartCount').textContent = count;
+            }
+        }
+
+        function showLocationModal() {
+            showNotification('Location update coming soon!', 'info');
+        }
+
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm) {
+                window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`;
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const icon = document.getElementById('notificationIcon');
+            const messageEl = document.getElementById('notificationMessage');
+            
+            icon.className = 'fas';
+            if (type === 'success') {
+                icon.classList.add('fa-check-circle');
+            } else if (type === 'error') {
+                icon.classList.add('fa-exclamation-circle');
+            } else {
+                icon.classList.add('fa-info-circle');
+            }
+            
+            notification.className = 'notification ' + type;
+            messageEl.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                hideNotification();
+            }, 3000);
+        }
+
+        function hideNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('show');
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
