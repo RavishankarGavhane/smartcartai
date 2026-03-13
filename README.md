@@ -124,7 +124,10 @@ JavaScript	Interactivity
 Jinja2	Templating
 Font Awesome	Icons
 
-📁 Project Structure
+
+## 📁 Project Structure
+
+```
 SmartCartAI/
 │
 ├── routes/                     # API Routes
@@ -151,29 +154,32 @@ SmartCartAI/
 │   ├── reset_password.html
 │   └── reset_password_confirmation.html
 │
-├── utils/                      # Utility functions
+├── utils/                      # Utility Functions
 │   ├── email_utils.py
 │   ├── order_utils.py
 │   └── security.py
 │
-├── static/                     # Static files
+├── static/                     # Static Files
 │   ├── css/
 │   ├── js/
 │   └── images/
 │
 ├── main.py                     # Application entry point
-├── database.py                 # Database connection
+├── database.py                 # Database connection setup
 ├── models.py                   # SQLAlchemy models
 ├── schemas.py                  # Pydantic schemas
 ├── crud.py                     # CRUD operations
 ├── auth.py                     # Authentication logic
-├── auth_utils.py               # Authentication helpers
-├── config.py                   # App configuration
+├── auth_utils.py               # Authentication helper functions
+├── config.py                   # Application configuration
 ├── data.py                     # Sample product data
 ├── init_db.py                  # Database initialization
-├── requirements.txt            # Dependencies
+│
+├── requirements.txt            # Project dependencies
 ├── .env                        # Environment variables
-└── README.md
+└── README.md                   # Project documentation
+```
+
 🔧 Installation
 Prerequisites
 
