@@ -201,8 +201,8 @@ Prerequisites
 ![Order Tracking](static/images/ordertrackingcart.png)
 
 ### 📧 Email Tracking
-![Email Tracking 1](static/images/Email- Order Confirmed_page-0001.jpg)
-![Email Tracking 2](static/images/Email- Order Confirmed_page-0002.jpg)
+![Email Tracking 1](static/images/EmailOrderConfirmed_page-0001.jpg)
+![Email Tracking 2](static/images/EmailOrderConfirmed_page-0002.jpg)
 
 
 Python 3.10+
