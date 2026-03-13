@@ -183,32 +183,22 @@ SmartCartAI/
 🔧 Installation
 Prerequisites
 
-## 📸 Application Screenshots
-
 ### 🔐 Login & Account Pages
-| Login Page | Create Account |
-|------------|----------------|
-| ![Login Page](static/images/loginpage.png) | ![Create Account](static/images/createaccountpage.png) |
+![Login Page](static/images/logincart.png)
+![Create Account](static/images/creataccouncart.png)
 
 ### 🏠 Dashboard & Navigation
-| User Dashboard | Home / Image Preview |
-|----------------|--------------------|
-| ![User Dashboard](static/images/userdashboard.png) | ![Home Page](static/images/image.png) |
+![User Dashboard](static/images/userdashbardcant.png)
+![Home Page](static/images/hompagesmartcartai.png)
+![Home Page 2](static/images/home1.png)
+![All Orders](static/images/allordercart.png)
 
 ### 🛒 Shopping & Deals
-| Shopping Cart | Today's Deals |
-|---------------|---------------|
-| ![Shopping Cart](static/images/shopingcart.png) | ![Today's Deals](static/images/todaysdeal.png) |
+![Shopping Cart](static/images/shopingcart.png)
+![Today's Deals](static/images/todaysdealcart.png)
 
 ### 📦 Order Tracking
-| Order Tracking | Tracking Detail |
-|----------------|----------------|
-| ![Order Tracking](static/images/ordertracking.png) | ![Tracking Order](static/images/trackingorder.png) |
-
-### 📸 Extra Images / Misc
-| Misc Image 1 | Misc Image 2 |
-|--------------|--------------|
-| ![Misc 1](static/images/image1.png) | ![Misc 2](static/images/image1.png) |
+![Order Tracking](static/images/ordertrackingcart.png)
 
 Python 3.10+
 
