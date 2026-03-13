@@ -183,6 +183,33 @@ SmartCartAI/
 🔧 Installation
 Prerequisites
 
+## 📸 Application Screenshots
+
+### 🔐 Login & Account Pages
+| Login Page | Create Account |
+|------------|----------------|
+| ![Login Page](static/images/loginpage.png) | ![Create Account](static/images/createaccountpage.png) |
+
+### 🏠 Dashboard & Navigation
+| User Dashboard | Home / Image Preview |
+|----------------|--------------------|
+| ![User Dashboard](static/images/userdashboard.png) | ![Home Page](static/images/image.png) |
+
+### 🛒 Shopping & Deals
+| Shopping Cart | Today's Deals |
+|---------------|---------------|
+| ![Shopping Cart](static/images/shopingcart.png) | ![Today's Deals](static/images/todaysdeal.png) |
+
+### 📦 Order Tracking
+| Order Tracking | Tracking Detail |
+|----------------|----------------|
+| ![Order Tracking](static/images/ordertracking.png) | ![Tracking Order](static/images/trackingorder.png) |
+
+### 📸 Extra Images / Misc
+| Misc Image 1 | Misc Image 2 |
+|--------------|--------------|
+| ![Misc 1](static/images/image1.png) | ![Misc 2](static/images/image1.png) |
+
 Python 3.10+
 
 PostgreSQL 14+
