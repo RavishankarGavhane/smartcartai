@@ -200,6 +200,11 @@ Prerequisites
 ### 📦 Order Tracking
 ![Order Tracking](static/images/ordertrackingcart.png)
 
+### 📦 Email Tracking
+![Email Tracking] (static/images/Email- Order Confirmed_page-0001)
+![Email Tracking] (static/images/Email- Order Confirmed_page-0002)
+
+
 Python 3.10+
 
 PostgreSQL 14+
